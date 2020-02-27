@@ -10,3 +10,5 @@ data_long <- reshape(data[2:5],
 data_long <- na.omit(data_long)
 data_long <- data_long[1:2]
 rownames(data_long) <- NULL
+
+boxplot(length_micron ~ alcohol_content_pc, data_long)
