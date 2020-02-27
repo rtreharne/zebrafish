@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "data <- read.csv(\"zebrafish.csv\", header=T)\n\n\ndata_long <-reshape(data[2:5],\n                      varying = list(names(data[2:5])),\n                      v.names = \"length_micron\",\n                      timevar = \"alcohol_content_pc\",\n                      times = c(\"0.0\", \"1.5\", \"2.0\", \"2.5\"),\n                      direction = \"long\")\n\ndata_long <- na.omit(data_long)\ndata_long <- data_long[1:2]\nrownames(data_long) <- NULL\n\nhist(data_long$length_micron)\n\ngroup_1 = subset(data_long, data_long$alcohol_content_pc==\"0.0\" | data_long$alcohol_content_pc==\"2.5\")\n\nt.test(length_micron ~ alcohol_content_pc, group_1)\n\n# https://www.datanovia.com/en/blog/how-to-create-histogram-by-group-in-r/\n\nlibrary(ggplot2)\ntheme_set(\n  theme_classic() + \n    theme(legend.position = \"top\")\n)\n\n# Change line color by alcohol content\nggplot(data_long, aes(x = length_micron)) +\n  geom_histogram(aes(color = alcohol_content_pc, fill=alcohol_content_pc),\n                 position = \"identity\", bins = 30, alpha = 0.4) +\n  scale_color_manual(values = c(\"red\", \"yellow\", \"green\", \"blue\")) +\n  scale_fill_manual(values = c(\"red\", \"yellow\", \"green\", \"blue\")) +\n  labs(x=\"Length (micron)\", y=\"Frequency\", fill=\"Alcohol concentration (%)\")\n",
+    "created" : 1582645883518.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2416229267",
+    "id" : "9737AC38",
+    "lastKnownWriteTime" : 1582700425,
+    "last_content_update" : 1582700426004,
+    "path" : "~/Desktop/zebrafish/zebrafish_test.R",
+    "project_path" : "zebrafish_test.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

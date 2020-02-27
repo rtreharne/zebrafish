@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "data <- read.csv(\"zebrafish.csv\")\n\ndata_long <- reshape(data[2:5],\n                     varying = list(names(data[2:5])),\n                     v.names = \"length_micron\",\n                     timevar = \"alcohol_content_pc\",\n                     times = c(\"0.0\", \"1.5\", \"2.0\", \"2.5\"),\n                     direction =\"long\")\n\ndata_long <- na.omit(data_long)\ndata_long <- data_long[1:2]\nrownames(data_long) <- NULL\n",
+    "created" : 1582699585592.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3973466941",
+    "id" : "BE0E5830",
+    "lastKnownWriteTime" : 1582701132,
+    "last_content_update" : 1582701132,
+    "path" : "~/Desktop/zebrafish/zebrafish.R",
+    "project_path" : "zebrafish.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
