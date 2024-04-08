@@ -1,41 +1,49 @@
-data <- read.csv("zebrafish.csv")
+# Load the dataset
+fish_data <- read.csv("fabricated_fish_data.csv", header=TRUE)
 
-data_long <- reshape(data[2:5],
-                     varying = list(names(data[2:5])),
-                     v.names = "length_micron",
-                     timevar = "alcohol_content_pc",
-                     times = c("0.0", "1.5", "2.0", "2.5"),
-                     direction ="long")
+# Inspect the dataset
+head(fish_data) # Display the first few rows of the dataset
 
-# Get rid of all the NA values
-data_long <- na.omit(data_long)
+# Perform Shapiro-Wilk Normality Test
+normality_tests <- lapply(fish_data, shapiro.test)
+print("Normality Test Results:")
+print(normality_tests)
 
-# Get rid of the random "id" end column
-data_long <- data_long[1:2]
+# Convert wide format data to long format for ANOVA/Kruskal-Wallis
+long_fish_data <- stack(fish_data[names(fish_data)])
+names(long_fish_data) <- c("Length", "Group") # Rename columns
 
-# Reset the index of your dataframe (don't need to but it looks nicer)
-rownames(data_long) <- NULL
+# If data is normal, perform ANOVA
+anova_res = aov(Length ~ Group, data = long_fish_data)
+anova_summary <- summary(anova_res)
+print(anova_summary)
 
-# Generate a boxplot
-boxplot(length_micron ~ alcohol_content_pc, data_long)
+# Perform post-hoc tests for ANOVA (TukeyHSD)
+tukey_res <- TukeyHSD(anova_res)
+print(tukey_res)
 
-# Subset the data so that it only contains rows or alcohol_content_pcs of 0% and 2.5% (or any other % you choose)
-sub <- subset(data_long, data_long$alcohol_content_pc == "0.0" | data_long$alcohol_content_pc == "2.5")
+# For non-normally distributed data
+# Perform Kruskal-Wallis Test
+kruskal_res <- kruskal.test(Length ~ Group, data = long_fish_data)
 
-# Perform your t-test on these two groups
-t.test(length_micron ~ alcohol_content_pc, sub)
+# Print results of Kruskal-Wallis Test
+print("Kruskal-Wallis Test Result:")
+print(kruskal_res)
 
-# How about a boss histogram?
-library(ggplot2)
-theme_set(
-  theme_classic() + 
-    theme(legend.position = "top")
-)
 
-# Change line color by alcohol content
-ggplot(data_long, aes(x = length_micron)) +
-  geom_histogram(aes(color = alcohol_content_pc, fill=alcohol_content_pc),
-                 position = "identity", bins = 30, alpha = 0.4) +
-  scale_color_manual(values = c("red", "yellow", "green", "blue")) +
-  scale_fill_manual(values = c("red", "yellow", "green", "blue")) +
-  labs(x="Length (micron)", y="Frequency")
+# Post-hoc analysis: Since base R does not have a direct equivalent to Dunn's test for post-hoc analysis
+# following a Kruskal-Wallis test, I suggest performing pairwise comparisons using Wilcoxon rank sum test with Bonferroni correction.
+# Here's how you can do it:
+pairwise_wilcox_long <- pairwise.wilcox.test(
+  long_fish_data$Length,
+  long_fish_data$Group,
+  p.adjust.method = "bonferroni")
+
+# Print results of pairwise comparisons
+print("Pairwise Comparisons (Wilcoxon) with Bonferroni Correction:")
+print(pairwise_wilcox)
+
+# Generating a boxplot
+boxplot(Length ~ Group, data=long_fish_data,
+        names = c("0%", "1.5%", "2%", "2.5%"),
+        xlab = "Ethanol Concentration", ylab = "Length (microns)")
