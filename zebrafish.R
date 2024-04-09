@@ -4,6 +4,13 @@ fish_data <- read.csv("fabricated_fish_data.csv", header=TRUE)
 # Inspect the dataset
 head(fish_data) # Display the first few rows of the dataset
 
+# Descriptiv statistics
+summary <- summary(fish_data)
+
+# Add standard deviation to summary
+summary$sd <- sapply(fish_data, sd)
+
+
 # Perform Shapiro-Wilk Normality Test
 normality_tests <- lapply(fish_data, shapiro.test)
 print("Normality Test Results:")

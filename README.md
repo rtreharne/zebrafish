@@ -3,6 +3,8 @@
 
 *Robert Treharne*
 
+[Watch the video Walkthrough](https://youtu.be/profkcl3EYo?si=en-0Emc3StpJp0-Q)
+
 This comprehensive guide provides a structured approach to analysing the effects of different concentrations of ethanol on the size of zebrafish embryos using R. It includes steps for preliminary data inspection, statistical analysis, visualisation, and decision-making processes for selecting appropriate tests.
 
 This document serves as an appendix to your *LIFE113: Quantitative Skills* course which does not provide you with the full knowledge required to perform an analysis of the zebrafish dataset.
@@ -45,7 +47,14 @@ head(dataset)
 ### Descriptive Statistics
 
 ```r
-summary(dataset)
+# This will calculate, mean and median but NOT standard deviation!
+summary <- summary(dataset)
+
+# To calculate standard deviation for each column, you can try something like this:
+summary$sd <- sapply(fish_data, sd)
+
+# To view the summary:
+print(summary)
 ```
 
 ### Normality Test
