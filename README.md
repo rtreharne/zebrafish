@@ -125,9 +125,6 @@ boxplot(fish_data$ethanol_conc_0, fish_data$ethanol_conc_1.5, fish_data$ethanol_
     xlab = "Ethanol Concentration", ylab = "Length (microns)")
 ```
 
-## Conclusion
-
-This guide, with its structured approach to statistical analysis and visualisation, enables researchers to identify significant effects of ethanol concentration on zebrafish embryo size, ensuring informed conclusions are drawn from the data.
 
 
 
